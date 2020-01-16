@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Node.JS Express twitter feed for Brown CS132",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,6 +17,10 @@
     "eslint": "^6.8.0"
   },
   "dependencies": {
-    "errorhandler": "^1.5.1"
+    "@types/node": "^13.1.7",
+    "axios": "^0.19.1",
+    "dotenv": "^8.2.0",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1"
   }
 }
