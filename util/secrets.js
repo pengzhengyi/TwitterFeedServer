@@ -4,10 +4,10 @@ import fs from "fs";
 
 if (fs.existsSync(".env")) {
   // synchronously look for .env file in file system
-  console.debug("Using .env file to supply config environment variables");
+  console.debug("[i] Using .env file to supply config environment variables");
   dotenv.config({ path: ".env" });
 } else {
-  console.error(".env file does not exist! Please supply a .env file");
+  console.error("[✘] .env file does not exist! Please supply a .env file");
   process.exit(1);
 }
 
@@ -20,7 +20,7 @@ if (fs.existsSync(".env")) {
  *    None, will exit.
  */
 function defaultVariableNotFoundHandler(variableName) {
-  console.error(`Cannot find ${variableName} in dot environment!`);
+  console.error(`[✘] Cannot find ${variableName} in dot environment!`);
   process.exit(1);
 }
 
@@ -51,3 +51,10 @@ export const ACCESS_TOKEN_KEY = resolveEnvironmentVariable("ACCESS_TOKEN_KEY");
 export const ACCESS_TOKEN_SECRET = resolveEnvironmentVariable("ACCESS_TOKEN_SECRET");
 
 export const ACCESS_TOKEN = resolveEnvironmentVariable("ACCESS_TOKEN");
+
+export const MONGODB_USERNAME = resolveEnvironmentVariable("MONGODB_USERNAME");
+export const MONGODB_PASSWORD = resolveEnvironmentVariable("MONGODB_PASSWORD");
+export const MONGODB_URL = resolveEnvironmentVariable("MONGODB_URL");
+export const MONGODB_TWEET_DB_NAME = resolveEnvironmentVariable("MONGODB_TWEET_DB_NAME");
+export const MONGODB_TWEET_COLLECTION_NAME = resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_NAME");
+export const MONGODB_TWEET_COLLECTION_SIZE_LIMIT = resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_SIZE_LIMIT");
