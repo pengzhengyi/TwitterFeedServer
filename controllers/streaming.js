@@ -1,6 +1,6 @@
-import { getCollection } from "../database/connect.js";
-import { streamingTweets } from "../database/Tweet.js";
-import { stopPullTweetsPeriodically, stopAllPullTweetsPeriodically } from "../api/search.js";
+const { getCollection } = require("../database/connect.js");
+const { streamingTweets } = require("../database/Tweet.js");
+const { stopPullTweetsPeriodically, stopAllPullTweetsPeriodically } = require("../api/search.js");
 
 /**
  * GET /streaming/start?q=...
@@ -8,16 +8,16 @@ import { stopPullTweetsPeriodically, stopAllPullTweetsPeriodically } from "../ap
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-export function startStreamingTweets(req, res) {
-  const query = req.query.q;
-  if (!query) {
-    return res.sendStatus(400);
-  }
+function startStreamingTweets(req, res) {
+    const query = req.query.q;
+    if (!query) {
+        return res.sendStatus(400);
+    }
 
-  const collection = getCollection();
-  streamingTweets(collection, query);
-  console.log(`[✔] Streaming started for ${query}`);
-  return res.sendStatus(200);
+    const collection = getCollection();
+    streamingTweets(collection, query);
+    console.log(`[✔] Streaming started for ${query}`);
+    return res.sendStatus(200);
 }
 
 /**
@@ -26,15 +26,15 @@ export function startStreamingTweets(req, res) {
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-export function stopStreamingTweets(req, res) {
-  const query = req.query.q;
-  if (!query) {
-    return res.sendStatus(400);
-  }
+function stopStreamingTweets(req, res) {
+    const query = req.query.q;
+    if (!query) {
+        return res.sendStatus(400);
+    }
 
-  stopPullTweetsPeriodically(query);
-  console.log(`[✔] Streaming stoped for ${query}`);
-  return res.sendStatus(200);
+    stopPullTweetsPeriodically(query);
+    console.log(`[✔] Streaming stoped for ${query}`);
+    return res.sendStatus(200);
 }
 
 /**
@@ -43,8 +43,12 @@ export function stopStreamingTweets(req, res) {
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-export function stopAllStreamingTweets(req, res) {
-  stopAllPullTweetsPeriodically();
-  console.log(`[✔] Streaming stoped for all`);
-  return res.sendStatus(200);
+function stopAllStreamingTweets(req, res) {
+    stopAllPullTweetsPeriodically();
+    console.log("[✔] Streaming stoped for all");
+    return res.sendStatus(200);
 }
+
+module.exports = {
+  startStreamingTweets, stopStreamingTweets, stopAllStreamingTweets
+};

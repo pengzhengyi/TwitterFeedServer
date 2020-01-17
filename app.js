@@ -1,6 +1,7 @@
-import express from "express";
-import * as streamingController from "./controllers/streaming.js";
-import * as feedController from "./controllers/feed.js";
+const express = require("express");
+const { startStreamingTweets, stopStreamingTweets, stopAllStreamingTweets } = require("./controllers/streaming.js");
+const { randomTweets, sortedTweets, sameTweets } = require("./controllers/feed.js");
+
 
 // Create Express server
 const app = express();
@@ -8,17 +9,17 @@ const app = express();
 // Express configuration
 app.set("port", 3000);
 
-app.get("/streaming/start", streamingController.startStreamingTweets);
-app.get("/streaming/stop", streamingController.stopStreamingTweets);
-app.get("/streaming/stopall", streamingController.stopAllStreamingTweets);
+app.get("/streaming/start", startStreamingTweets);
+app.get("/streaming/stop", stopStreamingTweets);
+app.get("/streaming/stopall", stopAllStreamingTweets);
 
-app.get("/feed/random", feedController.randomTweets);
-app.get("/feed/sorted", feedController.sortedTweets);
-app.get("/feed/same", feedController.sameTweets);
+app.get("/feed/random", randomTweets);
+app.get("/feed/sorted", sortedTweets);
+app.get("/feed/same", sameTweets);
 
 // handle missing pages
 app.get("*", function(req, res) {
-  res.sendStatus(404);
+    res.sendStatus(404);
 });
 
-export default app;
+module.exports = app;

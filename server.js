@@ -1,18 +1,18 @@
-import errorHandler from "errorhandler";
-import { connect } from "./database/connect.js";
-import app from "./app.js";
+const errorHandler = require("errorHandler");
+const { connect } = require("./database/connect.js");
 
 /**
  * Error Handler. Provides full stack - remove for production
  */
-app.use(errorHandler());
 
 connect(() => {
-  /**
-   * Start Express server.
-   */
-  const server = app.listen(app.get("port"), () => {
-      console.log(`[✔] App is running at http://localhost:${app.get("port")} in ${app.get("env")} mode`);
-      console.log("[i] Press CTRL-C to stop\n");
-  });
+    const app = require("./app.js");
+    app.use(errorHandler());
+    /**
+     * Start Express server.
+     */
+    const server = app.listen(app.get("port"), () => {
+        console.log(`[✔] App is running at http://localhost:${app.get("port")} in ${app.get("env")} mode`);
+        console.log("[i] Press CTRL-C to stop\n");
+    });
 });

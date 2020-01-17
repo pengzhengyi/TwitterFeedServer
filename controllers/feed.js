@@ -1,6 +1,6 @@
-import { getCollection } from "../database/connect.js";
-import { getRandomTweets, getSortedTweets } from "../database/Tweet.js";
-import { getCurrentTimestamp } from "../util/timestamp.js";
+const { getCollection } = require("../database/connect.js")
+const { getRandomTweets, getSortedTweets } = require("../database/Tweet.js")
+const { getCurrentTimestamp } = require("../util/timestamp.js")
 
 /**
  * GET /feed/random?q=...&size=...
@@ -8,22 +8,22 @@ import { getCurrentTimestamp } from "../util/timestamp.js";
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-export function randomTweets(req, res) {
-  const query = req.query.q;
-  let size = req.query.size;
-  if (!query) {
-    return res.sendStatus(400);
-  }
-  if (!size) {
-    size = undefined;
-  } else {
-    size = Number.parseInt(size);
-  }
+function randomTweets(req, res) {
+    const query = req.query.q;
+    let size = req.query.size;
+    if (!query) {
+        return res.sendStatus(400);
+    }
+    if (!size) {
+        size = undefined;
+    } else {
+        size = Number.parseInt(size);
+    }
 
-  getRandomTweets(query, size, (tweets) => {
-    console.log(`[i] (${getCurrentTimestamp()}) Sending ${tweets.length} random tweets about ${query}`);
-    return res.status(200).json({tweets});
-  });
+    getRandomTweets(query, size, (tweets) => {
+        console.log(`[i] (${getCurrentTimestamp()}) Sending ${tweets.length} random tweets about ${query}`);
+        return res.status(200).json({tweets});
+    });
 }
 
 /**
@@ -32,47 +32,47 @@ export function randomTweets(req, res) {
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-export function sortedTweets(req, res) {
-  const query = req.query.q;
-  let size = req.query.size;
-  if (!query) {
-    return res.sendStatus(400);
-  }
-  if (!size) {
-    size = undefined;
-  } else {
-    size = Number.parseInt(size);
-  }
-  let since_id = req.query.since_id;
-  if (!since_id) {
-    since_id = undefined;
-  }
-  const order = req.query.order;
-  let ascending;
-  if (!order) {
-    ascending = true;
-  } else {
-    ascending = order === "asc";
-  }
-
-  getSortedTweets(query, size, since_id, ascending, (tweets) => {
-    console.log(`[i] (${getCurrentTimestamp()}) Sending ${tweets.length} chronologically sorted tweets about ${query}`);
-
-    let next_since_id = "0";
-    if (ascending) {
-      const lastTweet = tweets[tweets.length - 1];
-      next_since_id = lastTweet.id_str;
+function sortedTweets(req, res) {
+    const query = req.query.q;
+    let size = req.query.size;
+    if (!query) {
+        return res.sendStatus(400);
+    }
+    if (!size) {
+        size = undefined;
+    } else {
+        size = Number.parseInt(size);
+    }
+    let since_id = req.query.since_id;
+    if (!since_id) {
+        since_id = undefined;
+    }
+    const order = req.query.order;
+    let ascending;
+    if (!order) {
+        ascending = true;
+    } else {
+        ascending = order === "asc";
     }
 
-    const toSend = {
-      tweets,
-      order: ascending ? "asc": "desc",
-    };
-    if (ascending) {
-      toSend["next_since_id"] = next_since_id;
-    }
-    return res.status(200).json(toSend);
-  });
+    getSortedTweets(query, size, since_id, ascending, (tweets) => {
+        console.log(`[i] (${getCurrentTimestamp()}) Sending ${tweets.length} chronologically sorted tweets about ${query}`);
+
+        let next_since_id = "0";
+        if (ascending) {
+            const lastTweet = tweets[tweets.length - 1];
+            next_since_id = lastTweet.id_str;
+        }
+
+        const toSend = {
+            tweets,
+            order: ascending ? "asc": "desc",
+        };
+        if (ascending) {
+            toSend["next_since_id"] = next_since_id;
+        }
+        return res.status(200).json(toSend);
+    });
 }
 
 /**
@@ -81,14 +81,18 @@ export function sortedTweets(req, res) {
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-export function sameTweets(req, res) {
-  const query = req.query.q;
-  if (!query) {
-    return res.sendStatus(400);
-  }
-  getSortedTweets(query, undefined, undefined, true, (tweets) => {
-    console.log(`[i] (${getCurrentTimestamp()}) Sending first ${tweets.length} tweets about ${query}`);
+function sameTweets(req, res) {
+    const query = req.query.q;
+    if (!query) {
+        return res.sendStatus(400);
+    }
+    getSortedTweets(query, undefined, undefined, true, (tweets) => {
+        console.log(`[i] (${getCurrentTimestamp()}) Sending first ${tweets.length} tweets about ${query}`);
 
-    return res.status(200).json({ tweets });
-  });
+        return res.status(200).json({ tweets });
+    });
 }
+
+module.exports = {
+  randomTweets, sortedTweets, sameTweets
+};

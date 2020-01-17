@@ -1,3 +1,7 @@
-export function getCurrentTimestamp() {
-  return new Date().toLocaleTimeString();
+function getCurrentTimestamp() {
+    return new Date().toLocaleTimeString();
 }
+
+module.exports = {
+  getCurrentTimestamp
+};

@@ -1,14 +1,14 @@
-import dotenv from "dotenv";
-import fs from "fs";
+const dotenv = require("dotenv");
+const fs = require("fs");
 
 
 if (fs.existsSync(".env")) {
-  // synchronously look for .env file in file system
-  console.debug("[i] Using .env file to supply config environment variables");
-  dotenv.config({ path: ".env" });
+    // synchronously look for .env file in file system
+    console.debug("[i] Using .env file to supply config environment variables");
+    dotenv.config({ path: ".env" });
 } else {
-  console.error("[✘] .env file does not exist! Please supply a .env file");
-  process.exit(1);
+    console.error("[✘] .env file does not exist! Please supply a .env file");
+    process.exit(1);
 }
 
 /**
@@ -20,8 +20,8 @@ if (fs.existsSync(".env")) {
  *    None, will exit.
  */
 function defaultVariableNotFoundHandler(variableName) {
-  console.error(`[✘] Cannot find ${variableName} in dot environment!`);
-  process.exit(1);
+    console.error(`[✘] Cannot find ${variableName} in dot environment!`);
+    process.exit(1);
 }
 
 /**
@@ -35,28 +35,30 @@ function defaultVariableNotFoundHandler(variableName) {
  *    The value of the variable specified by variableName in dot environment.
  */
 function resolveEnvironmentVariable(
-     variableName,
-     variableNotFoundHandler=defaultVariableNotFoundHandler) {
-  const value = process.env[variableName];
-  if (value) {
-    return value;
-  } else {
-    variableNotFoundHandler(name);
-  }
+    variableName,
+    variableNotFoundHandler=defaultVariableNotFoundHandler) {
+    const value = process.env[variableName];
+    if (value) {
+        return value;
+    } else {
+        variableNotFoundHandler(name);
+    }
 }
 
-export const CONSUMER_KEY = resolveEnvironmentVariable("CONSUMER_KEY");
-export const CONSUMER_SECRET = resolveEnvironmentVariable("CONSUMER_SECRET");
-export const ACCESS_TOKEN_KEY = resolveEnvironmentVariable("ACCESS_TOKEN_KEY");
-export const ACCESS_TOKEN_SECRET = resolveEnvironmentVariable("ACCESS_TOKEN_SECRET");
+module.exports = {
+    CONSUMER_KEY: resolveEnvironmentVariable("CONSUMER_KEY"),
+    CONSUMER_SECRET: resolveEnvironmentVariable("CONSUMER_SECRET"),
+    ACCESS_TOKEN_KEY: resolveEnvironmentVariable("ACCESS_TOKEN_KEY"),
+    ACCESS_TOKEN_SECRET: resolveEnvironmentVariable("ACCESS_TOKEN_SECRET"),
 
-export const ACCESS_TOKEN = resolveEnvironmentVariable("ACCESS_TOKEN");
+    ACCESS_TOKEN: resolveEnvironmentVariable("ACCESS_TOKEN"),
 
-export const MONGODB_USERNAME = resolveEnvironmentVariable("MONGODB_USERNAME");
-export const MONGODB_PASSWORD = resolveEnvironmentVariable("MONGODB_PASSWORD");
-export const MONGODB_URL = resolveEnvironmentVariable("MONGODB_URL");
-export const MONGODB_TWEET_DB_NAME = resolveEnvironmentVariable("MONGODB_TWEET_DB_NAME");
-export const MONGODB_TWEET_COLLECTION_NAME = resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_NAME");
-export const MONGODB_TWEET_COLLECTION_SIZE_LIMIT = Number.parseInt(resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_SIZE_LIMIT"));
+    MONGODB_USERNAME: resolveEnvironmentVariable("MONGODB_USERNAME"),
+    MONGODB_PASSWORD: resolveEnvironmentVariable("MONGODB_PASSWORD"),
+    MONGODB_URL: resolveEnvironmentVariable("MONGODB_URL"),
+    MONGODB_TWEET_DB_NAME: resolveEnvironmentVariable("MONGODB_TWEET_DB_NAME"),
+    MONGODB_TWEET_COLLECTION_NAME: resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_NAME"),
+    MONGODB_TWEET_COLLECTION_SIZE_LIMIT: Number.parseInt(resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_SIZE_LIMIT")),
 
-export const API_REQUEST_DELAY = Number.parseInt(resolveEnvironmentVariable("API_REQUEST_DELAY"));
+    API_REQUEST_DELAY: Number.parseInt(resolveEnvironmentVariable("API_REQUEST_DELAY")),
+};
