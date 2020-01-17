@@ -13,6 +13,8 @@ app.get("/streaming/stop", streamingController.stopStreamingTweets);
 app.get("/streaming/stopall", streamingController.stopAllStreamingTweets);
 
 app.get("/feed/random", feedController.randomTweets);
+app.get("/feed/sorted", feedController.sortedTweets);
+app.get("/feed/same", feedController.sameTweets);
 
 // handle missing pages
 app.get("*", function(req, res) {

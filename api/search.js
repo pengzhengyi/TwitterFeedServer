@@ -49,7 +49,10 @@ export function search(q, resultType="recent", count=100, timelined=true, callba
       }
 
       if (Array.isArray(statuses) && statuses.length) {
-        statuses.forEach(status => status.from_query = q);
+        statuses.forEach(status => {
+          status.from_query = q;
+          status.created_at = new Date(status.created_at);
+        });
         callback(statuses);
       }
     })
