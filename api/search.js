@@ -12,7 +12,6 @@ function printNumberOfTweets(tweets) {
   console.log(`[✔] pulled ${tweets.length} tweets`);
 }
 
-let since_id = loadSinceID;
 const sinceIDStoredFilename = ".since_id.json"
 function loadSinceID() {
   if (fs.existsSync(sinceIDStoredFilename)) {
@@ -23,11 +22,13 @@ function loadSinceID() {
     return JSON.parse(fs.readFileSync(sinceIDStoredFilename, "utf8")).since_id;
   }
 }
+let since_id = loadSinceID;
 function updateSinceID(newSinceID) {
   // save in memory
   since_id = newSinceID;
   fs.writeFileSync(sinceIDStoredFilename, JSON.stringify({ since_id }));
 }
+
 /**
  * Invoke the Search API {@link https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets}
  *
@@ -48,6 +49,7 @@ export function search(q, resultType="recent", count=100, timelined=true, callba
       }
 
       if (Array.isArray(statuses) && statuses.length) {
+        statuses.forEach(status => status.from_query = q);
         callback(statuses);
       }
     })
@@ -57,7 +59,7 @@ export function search(q, resultType="recent", count=100, timelined=true, callba
     });
 }
 
-let pullingTimeout;
+const pullingTimeouts = new Map();
 
 /**
  * @param { String } query - The topic to search.
@@ -65,5 +67,18 @@ let pullingTimeout;
  * @param { (statuses: any) => void } callback - What to do with the returned tweets.
  */
 export function pullTweetsPeriodically(query, delay=API_REQUEST_DELAY, callback=printNumberOfTweets) {
-  pullingTimeout = setInterval(() => search(query, undefined, undefined, undefined, callback), delay);
+  if (pullingTimeouts.has(query)) {
+    // streaming already started
+    return;
+  }
+  const pullingTimeout = setInterval(() => search(query, undefined, undefined, undefined, callback), delay);
+  pullingTimeouts.set(query, pullingTimeout);
+}
+
+export function stopPullTweetsPeriodically(query) {
+  if (pullingTimeouts.has(query)) {
+    const pullingTimeout = pullingTimeouts.get(query);
+    clearInterval(pullingTimeout);
+    pullingTimeouts.delete(query);
+  }
 }
