@@ -1,3 +1,4 @@
+import fs from "fs";
 import { client } from "./twitter.js";
 import { API_REQUEST_DELAY } from "../util/secrets.js";
 
@@ -11,7 +12,22 @@ function printNumberOfTweets(tweets) {
   console.log(`[✔] pulled ${tweets.length} tweets`);
 }
 
-let since_id = 0;
+let since_id = loadSinceID;
+const sinceIDStoredFilename = ".since_id.json"
+function loadSinceID() {
+  if (fs.existsSync(sinceIDStoredFilename)) {
+    // assume no tweets has been fetched
+    return 0;
+  } else {
+    console.log("[✔] Resume from last search timeline");
+    return JSON.parse(fs.readFileSync(sinceIDStoredFilename, "utf8")).since_id;
+  }
+}
+function updateSinceID(newSinceID) {
+  // save in memory
+  since_id = newSinceID;
+  fs.writeFileSync(sinceIDStoredFilename, JSON.stringify({ since_id }));
+}
 /**
  * Invoke the Search API {@link https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets}
  *
@@ -28,7 +44,7 @@ export function search(q, resultType="recent", count=100, timelined=true, callba
       const { statuses, search_metadata } = tweets;
 
       if (timelined) {
-        since_id = search_metadata.max_id_str;
+        updateSinceID(search_metadata.max_id_str);
       }
 
       if (Array.isArray(statuses) && statuses.length) {
