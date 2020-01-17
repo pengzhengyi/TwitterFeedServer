@@ -1,6 +1,6 @@
 import { getCollection } from "../database/connect.js";
 import { streamingTweets } from "../database/Tweet.js";
-import { stopPullTweetsPeriodically } from "../api/search.js";
+import { stopPullTweetsPeriodically, stopAllPullTweetsPeriodically } from "../api/search.js";
 
 /**
  * GET /streaming/start?q=...
@@ -34,5 +34,17 @@ export function stopStreamingTweets(req, res) {
 
   stopPullTweetsPeriodically(query);
   console.log(`[✔] Streaming stoped for ${query}`);
+  return res.sendStatus(200);
+}
+
+/**
+ * GET /streaming/stopall
+ *
+ * @param { Request } req - Request.
+ * @param { Response } res - Response.
+ */
+export function stopAllStreamingTweets(req, res) {
+  stopAllPullTweetsPeriodically();
+  console.log(`[✔] Streaming stoped for all`);
   return res.sendStatus(200);
 }

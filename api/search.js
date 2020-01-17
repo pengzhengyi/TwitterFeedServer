@@ -82,3 +82,10 @@ export function stopPullTweetsPeriodically(query) {
     pullingTimeouts.delete(query);
   }
 }
+
+export function stopAllPullTweetsPeriodically() {
+  for (const pullingTimeout of pullingTimeouts.values()) {
+    clearInterval(pullingTimeout);
+  }
+  pullingTimeouts.clear();
+}

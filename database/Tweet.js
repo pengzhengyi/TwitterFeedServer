@@ -1,4 +1,5 @@
 import { pullTweetsPeriodically } from "../api/search.js";
+import { getCollection } from "./connect.js";
 
 
 function defaultSaveResultHandler(result) {
@@ -17,5 +18,29 @@ export function streamingTweets(collection, query, callback=defaultSaveResultHan
 
       callback(result);
     });
+  });
+}
+
+function defaultGetTweetsHandler(tweets) {
+  console.log(tweets);
+}
+
+/**
+ * @param { String } query - The topic to search.
+ * @param { Number } size - Number of tweets to return.
+ * @param { (tweets: Array<any>) => void } callback - What happens to the returned tweets.
+ */
+export function getRandomTweets(query, size=10, callback=defaultGetTweetsHandler) {
+  const collection = getCollection();
+  return collection.aggregate([
+    {$match: {"from_query": query}},
+    {$sample: {size}}
+  ]).toArray(function(err, tweets) {
+    if (err) {
+      console.error("[✘] MongoDB Error: unable to sample tweets. " + err);
+      return;
+    }
+
+    callback(tweets);
   });
 }
