@@ -58,3 +58,5 @@ export const MONGODB_URL = resolveEnvironmentVariable("MONGODB_URL");
 export const MONGODB_TWEET_DB_NAME = resolveEnvironmentVariable("MONGODB_TWEET_DB_NAME");
 export const MONGODB_TWEET_COLLECTION_NAME = resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_NAME");
 export const MONGODB_TWEET_COLLECTION_SIZE_LIMIT = resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_SIZE_LIMIT");
+
+export const API_REQUEST_DELAY = Number.parseInt(resolveEnvironmentVariable("API_REQUEST_DELAY"));
