@@ -2,8 +2,6 @@ import express from "express";
 
 import { search } from "./api/search.js";
 
-search("pizza");
-
 // Create Express server
 const app = express();
 
