@@ -11,7 +11,7 @@ function getMongoDBConnectionString() {
 const connectionString = getMongoDBConnectionString();
 
 
-const client = new MongoClient(connectionString, { useNewUrlParser: true, auto_reconnect : true });
+const client = new MongoClient(connectionString, { useNewUrlParser: true, auto_reconnect : true, useUnifiedTopology: true });
 let tweets_db;
 
 export function connect(callback) {

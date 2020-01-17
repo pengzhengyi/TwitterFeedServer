@@ -16,6 +16,7 @@ export function startStreamingTweets(req, res) {
 
   const collection = getCollection();
   streamingTweets(collection, query);
+  console.log(`[✔] Streaming started for ${query}`);
   return res.sendStatus(200);
 }
 
@@ -32,5 +33,6 @@ export function stopStreamingTweets(req, res) {
   }
 
   stopPullTweetsPeriodically(query);
+  console.log(`[✔] Streaming stoped for ${query}`);
   return res.sendStatus(200);
 }

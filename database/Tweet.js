@@ -2,7 +2,7 @@ import { pullTweetsPeriodically } from "../api/search.js";
 
 
 function defaultSaveResultHandler(result) {
-    console.log(`[i] Saved ${result.insertedCount} tweets in database.`);
+    console.log(`[i] (${new Date().toLocaleTimeString()}) Saved ${result.insertedCount} tweets in database.`);
 }
 /**
  * Save pulled tweets each time to database.
