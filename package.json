@@ -19,10 +19,11 @@
   "dependencies": {
     "@types/node": "^13.1.7",
     "axios": "^0.19.1",
+    "bluebird": "^3.7.2",
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
-    "mongoose": "^5.8.7",
+    "mongodb": "^3.5.0",
     "qs": "^6.9.1",
     "twitter": "^1.7.1"
   }
