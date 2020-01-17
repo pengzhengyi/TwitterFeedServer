@@ -1,4 +1,4 @@
-import { MONGODB_TWEET_DB_NAME, MONGODB_TWEET_COLLECTION_NAME, MONGODB_TWEET_COLLECTION_SIZE_LIMIT } from "../util/secrets.js";
+import { MONGODB_TWEET_COLLECTION_NAME, MONGODB_TWEET_COLLECTION_SIZE_LIMIT } from "../util/secrets.js";
 
 export function createTweetsCollection(db, callback) {
   db.createCollection(MONGODB_TWEET_COLLECTION_NAME, { capped: true, size: MONGODB_TWEET_COLLECTION_SIZE_LIMIT }, function(err) {
