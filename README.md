@@ -41,6 +41,9 @@ $ curl --request GET --url 'http://<fill IP address here>:<fill port number here
 
 **Example Response**
 ```json
+{
+    "activeStreamings":["noodle"]
+    }
 ```
 
 
