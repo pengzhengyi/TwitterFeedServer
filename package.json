@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pm2 start ecosystem.config.js",
+    "watch": "pm2 start ecosystem.config.js --watch",
     "production": "pm2 start ecosystem.config.js --env production"
   },
   "keywords": [
