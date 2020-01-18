@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    target: "ES2020",
+    "target": "ES2020",
     "esModuleInterop": true,
     "checkJs": true,
     "baseUrl": ".",
