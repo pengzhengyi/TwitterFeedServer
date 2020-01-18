@@ -129,12 +129,12 @@ function newestTweets(req, res) {
 }
 
 /**
- * GET /feed/same?q=...
+ * GET /feed/example?q=...
  *
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-function sameTweets(req, res) {
+function exampleTweets(req, res) {
     const query = req.query.q;
     if (!query) {
         return res.sendStatus(400);
@@ -147,5 +147,5 @@ function sameTweets(req, res) {
 }
 
 module.exports = {
-  randomTweets, timelineTweets, newestTweets, sameTweets
+  randomTweets, timelineTweets, newestTweets, exampleTweets
 };

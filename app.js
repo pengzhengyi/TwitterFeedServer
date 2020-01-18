@@ -1,6 +1,6 @@
 const express = require("express");
 const { startStreamingTweets, stopStreamingTweets, stopAllStreamingTweets } = require("./controllers/streaming.js");
-const { randomTweets, timelineTweets, newestTweets, sameTweets } = require("./controllers/feed.js");
+const { randomTweets, timelineTweets, newestTweets, exampleTweets } = require("./controllers/feed.js");
 
 
 // Create Express server
@@ -20,7 +20,7 @@ app.get("/streaming/stopall", stopAllStreamingTweets);
 app.get("/feed/random", randomTweets);
 app.get("/feed/timeline", timelineTweets);
 app.get("/feed/newest", newestTweets);
-app.get("/feed/same", sameTweets);
+app.get("/feed/example", exampleTweets);
 
 // handle missing pages
 app.get("*", function(req, res) {
