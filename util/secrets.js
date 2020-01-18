@@ -61,4 +61,11 @@ module.exports = {
     MONGODB_TWEET_COLLECTION_SIZE_LIMIT: Number.parseInt(resolveEnvironmentVariable("MONGODB_TWEET_COLLECTION_SIZE_LIMIT")),
 
     API_REQUEST_DELAY: Number.parseInt(resolveEnvironmentVariable("API_REQUEST_DELAY")),
+
+    STREAMING_START_USE_CONTROL_LOCK: resolveEnvironmentVariable("STREAMING_START_USE_CONTROL_LOCK") === "true",
+    STREAMING_START_CONTROL_LOCK: resolveEnvironmentVariable("STREAMING_START_CONTROL_LOCK"),
+    STREAMING_STOP_USE_CONTROL_LOCK: resolveEnvironmentVariable("STREAMING_STOP_USE_CONTROL_LOCK") === "true",
+    STREAMING_STOP_CONTROL_LOCK: resolveEnvironmentVariable("STREAMING_STOP_CONTROL_LOCK"),
+    STREAMING_STOPALL_USE_CONTROL_LOCK: resolveEnvironmentVariable("STREAMING_STOPALL_USE_CONTROL_LOCK") === "true",
+    STREAMING_STOPALL_CONTROL_LOCK: resolveEnvironmentVariable("STREAMING_STOPALL_CONTROL_LOCK"),
 };

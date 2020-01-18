@@ -1,7 +1,7 @@
 const { getCollection } = require("../database/connect.js")
 const { getRandomTweets, getSortedTweets } = require("../database/Tweet.js")
 const { getCurrentTimestamp } = require("../util/timestamp.js")
-
+const { validationErrorHandler } = require("../validators/validation.js");
 
 function buildSearchMetadata(req, statuses) {
   return {
@@ -18,11 +18,13 @@ function buildSearchMetadata(req, statuses) {
  * @param { Response } res - Response.
  */
 function randomTweets(req, res) {
+    if (!validationErrorHandler(req, res)) {
+      // Error in validation
+      return;
+    }
+
     const query = req.query.q;
     let size = req.query.size;
-    if (!query) {
-        return res.sendStatus(400);
-    }
     if (!size) {
         size = undefined;
     } else {
@@ -44,11 +46,13 @@ const sinceIDRegex = /since_id=\d+/;
  * @param { Response } res - Response.
  */
 function timelineTweets(req, res) {
+    if (!validationErrorHandler(req, res)) {
+      // Error in validation
+      return;
+    }
+
     const query = req.query.q;
     let size = req.query.size;
-    if (!query) {
-        return res.sendStatus(400);
-    }
     if (!size) {
         size = undefined;
     } else {
@@ -93,11 +97,13 @@ function timelineTweets(req, res) {
  * @param { Response } res - Response.
  */
 function newestTweets(req, res) {
+    if (!validationErrorHandler(req, res)) {
+      // Error in validation
+      return;
+    }
+
     const query = req.query.q;
     let size = req.query.size;
-    if (!query) {
-        return res.sendStatus(400);
-    }
     if (!size) {
         size = undefined;
     } else {
@@ -135,10 +141,12 @@ function newestTweets(req, res) {
  * @param { Response } res - Response.
  */
 function exampleTweets(req, res) {
-    const query = req.query.q;
-    if (!query) {
-        return res.sendStatus(400);
+    if (!validationErrorHandler(req, res)) {
+      // Error in validation
+      return;
     }
+
+    const query = req.query.q;
     getSortedTweets(query, undefined, undefined, true, (statuses) => {
         const search_metadata = buildSearchMetadata(req, statuses);
         console.log(`[i] (${getCurrentTimestamp()}) Sending first ${search_metadata.count} tweets about ${query}`);

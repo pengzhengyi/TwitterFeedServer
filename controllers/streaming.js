@@ -1,18 +1,21 @@
 const { getCollection } = require("../database/connect.js");
 const { streamingTweets } = require("../database/Tweet.js");
 const { stopPullTweetsPeriodically, stopAllPullTweetsPeriodically } = require("../api/search.js");
+const { validationErrorHandler } = require("../validators/validation.js");
 
 /**
- * GET /streaming/start?q=...
+ * POST /streaming/start?q=...
  *
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
 function startStreamingTweets(req, res) {
-    const query = req.query.q;
-    if (!query) {
-        return res.sendStatus(400);
+    if (!validationErrorHandler(req, res)) {
+      // Error in validation
+      return;
     }
+
+    const query = req.query.q;
 
     const collection = getCollection();
     streamingTweets(collection, query);
@@ -21,16 +24,17 @@ function startStreamingTweets(req, res) {
 }
 
 /**
- * GET /streaming/stop?q=...
+ * POST /streaming/stop?q=...
  *
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
 function stopStreamingTweets(req, res) {
-    const query = req.query.q;
-    if (!query) {
-        return res.sendStatus(400);
+    if (!validationErrorHandler(req, res)) {
+      // Error in validation
+      return;
     }
+    const query = req.query.q;
 
     stopPullTweetsPeriodically(query);
     console.log(`[✔] Streaming stoped for ${query}`);
@@ -38,12 +42,17 @@ function stopStreamingTweets(req, res) {
 }
 
 /**
- * GET /streaming/stopall
+ * POST /streaming/stopAll
  *
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
 function stopAllStreamingTweets(req, res) {
+    if (!validationErrorHandler(req, res)) {
+      // Error in validation
+      return;
+    }
+
     stopAllPullTweetsPeriodically();
     console.log("[✔] Streaming stoped for all");
     return res.sendStatus(200);
