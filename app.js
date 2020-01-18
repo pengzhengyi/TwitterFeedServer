@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 // Express configuration
-app.set("port", 3000);
+app.set("port", process.env.PORT || 80);
 
 app.get("/", function(req, res) {
   res.status(200).send('<p>Welcome, you have reached Twitter Feed Server. Look at <a href="https://github.com/pengzhengyi/TwitterFeedServer#api-endpoints" target="_blank" rel="noopener noreferrer" title="API Doc"> API Documentation.</p>');
