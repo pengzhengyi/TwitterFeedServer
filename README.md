@@ -13,7 +13,7 @@ A server for fetching and serving tweets.
     + Install [pm2](https://pm2.keymetrics.io)
       `npm install pm2@latest -g`
     + Run the server
-      `npm run dev` or `npm run production`
+      `npm run dev`, `npm run watch` (if you need hot reloading), or `npm run production`
 
 ## API Endpoints
 
@@ -22,6 +22,8 @@ Currently Active Server Address:
 + http://ec2-54-172-96-100.compute-1.amazonaws.com:3000/
 
 ### Fetching Tweets
+
+Manages how the server will stream tweets from Twitter.
 
 ##### POST /streaming/start
 
@@ -102,6 +104,8 @@ OK
 ---
 
 ### Serving Tweets
+
+Manages how applications can fetch tweets from the server.
 
 [Tweet Object documentation from Twitter](https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets#example-response)
 
