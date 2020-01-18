@@ -46,6 +46,8 @@ function resolveEnvironmentVariable(
 }
 
 module.exports = {
+    PORT_NUM: Number.parseInt(resolveEnvironmentVariable("PORT_NUM")),
+
     CONSUMER_KEY: resolveEnvironmentVariable("CONSUMER_KEY"),
     CONSUMER_SECRET: resolveEnvironmentVariable("CONSUMER_SECRET"),
     ACCESS_TOKEN_KEY: resolveEnvironmentVariable("ACCESS_TOKEN_KEY"),
