@@ -1,4 +1,4 @@
-const errorHandler = require("errorHandler");
+const errorhandler = require('errorhandler');
 const { connect } = require("./database/connect.js");
 
 /**
@@ -7,7 +7,7 @@ const { connect } = require("./database/connect.js");
 
 connect(() => {
     const app = require("./app.js");
-    app.use(errorHandler());
+    app.use(errorhandler());
     /**
      * Start Express server.
      */
