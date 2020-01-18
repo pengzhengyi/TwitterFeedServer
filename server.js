@@ -1,5 +1,7 @@
 const errorhandler = require('errorhandler');
+const ip = require("ip");
 const { connect } = require("./database/connect.js");
+
 
 /**
  * Error Handler. Provides full stack - remove for production
@@ -12,7 +14,7 @@ connect(() => {
      * Start Express server.
      */
     const server = app.listen(app.get("port"), () => {
-        console.log(`[✔] App is running at http://localhost:${app.get("port")} in ${app.get("env")} mode`);
+        console.log(`[✔] App is running at http://${ip.address()}:${app.get("port")} in ${app.get("env")} mode`);
         console.log("[i] Press CTRL-C to stop\n");
     });
 });
