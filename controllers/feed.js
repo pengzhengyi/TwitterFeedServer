@@ -2,6 +2,15 @@ const { getCollection } = require("../database/connect.js")
 const { getRandomTweets, getSortedTweets } = require("../database/Tweet.js")
 const { getCurrentTimestamp } = require("../util/timestamp.js")
 
+
+function buildSearchMetadata(req, statuses) {
+  return {
+    query: req.query.q,
+    count: statuses.length,
+  };
+}
+
+
 /**
  * GET /feed/random?q=...&size=...
  *
@@ -20,19 +29,21 @@ function randomTweets(req, res) {
         size = Number.parseInt(size);
     }
 
-    getRandomTweets(query, size, (tweets) => {
-        console.log(`[i] (${getCurrentTimestamp()}) Sending ${tweets.length} random tweets about ${query}`);
-        return res.status(200).json({tweets});
+    getRandomTweets(query, size, (statuses) => {
+        const search_metadata = buildSearchMetadata(req, statuses);
+        console.log(`[i] (${getCurrentTimestamp()}) Sending ${search_metadata.count} random tweets about ${query}`);
+        return res.status(200).json({statuses, search_metadata});
     });
 }
 
+const sinceIDRegex = /since_id=\d+/;
 /**
- * GET /feed/sorted?q=...&size=...&since_id=...&order=...
+ * GET /feed/timeline?q=...&size=...&since_id=...
  *
  * @param { Request } req - Request.
  * @param { Response } res - Response.
  */
-function sortedTweets(req, res) {
+function timelineTweets(req, res) {
     const query = req.query.q;
     let size = req.query.size;
     if (!query) {
@@ -45,33 +56,75 @@ function sortedTweets(req, res) {
     }
     let since_id = req.query.since_id;
     if (!since_id) {
-        since_id = undefined;
+        since_id = 0;
     }
-    const order = req.query.order;
-    let ascending;
-    if (!order) {
-        ascending = true;
+
+    getSortedTweets(query, size, since_id, true, (statuses) => {
+        const search_metadata = buildSearchMetadata(req, statuses);
+        if (search_metadata.count >= 1) {
+            const earliestTweet = statuses[0];
+            const latestTweet = statuses[search_metadata.count - 1];
+            const earliestTweetCreatedTime = new Date(earliestTweet.created_at).toString();
+            const latestTweetCreatedTime = new Date(latestTweet.created_at).toString();
+            console.log(`[i] (${getCurrentTimestamp()}) Sending ${search_metadata.count} tweets about ${query}, the earliest tweet was created at ${earliestTweetCreatedTime} and the latest tweet was created at ${latestTweetCreatedTime}`);
+
+            search_metadata.max_id = latestTweet.id;
+            search_metadata.max_id_str = latestTweet.id_str;
+
+            const url = req.originalUrl;
+            const nextSinceID = latestTweet.id_str;
+            if (sinceIDRegex.test(url)) {
+              search_metadata.refresh_url = url.replace(sinceIDRegex, `since_id=${nextSinceID}`);
+            } else {
+              search_metadata.refresh_url = `${url}&since_id=${nextSinceID}`;
+            }
+        } else {
+            console.log(`[i] (${getCurrentTimestamp()}) Unable to find later tweets about ${query} after ${since_id}`);
+        }
+
+        return res.status(200).json({ statuses, search_metadata });
+    });
+}
+
+/**
+ * GET /feed/newest?q=...&size=...
+ *
+ * @param { Request } req - Request.
+ * @param { Response } res - Response.
+ */
+function newestTweets(req, res) {
+    const query = req.query.q;
+    let size = req.query.size;
+    if (!query) {
+        return res.sendStatus(400);
+    }
+    if (!size) {
+        size = undefined;
     } else {
-        ascending = order === "asc";
+        size = Number.parseInt(size);
     }
 
-    getSortedTweets(query, size, since_id, ascending, (tweets) => {
-        console.log(`[i] (${getCurrentTimestamp()}) Sending ${tweets.length} chronologically sorted tweets about ${query}`);
+    getSortedTweets(query, size, undefined, false, (statuses) => {
+        const search_metadata = buildSearchMetadata(req, statuses);
+        console.log(`[i] (${getCurrentTimestamp()}) Sending ${search_metadata.count} most recent tweets about ${query}`);
+        if (search_metadata.count >= 1) {
+            const earliestTweet = statuses[search_metadata.count - 1];
+            const latestTweet = statuses[0];
+            const earliestTweetCreatedTime = new Date(earliestTweet.created_at).toString();
+            const latestTweetCreatedTime = new Date(latestTweet.created_at).toString();
+            console.log(`[i] (${getCurrentTimestamp()}) Sending ${search_metadata.count} tweets about ${query}, the earliest tweet was created at ${earliestTweetCreatedTime} and the latest tweet was created at ${latestTweetCreatedTime}`);
 
-        let next_since_id = "0";
-        if (ascending) {
-            const lastTweet = tweets[tweets.length - 1];
-            next_since_id = lastTweet.id_str;
+            search_metadata.max_id = latestTweet.id;
+            search_metadata.max_id_str = latestTweet.id_str;
+
+            const url = req.originalUrl;
+            const nextSinceID = latestTweet.id_str;
+            search_metadata.refresh_url = `${url.replace("newest", "timeline")}&since_id=${nextSinceID}`;
+        } else {
+            console.log(`[i] (${getCurrentTimestamp()}) Unable to find any tweets about ${query}`);
         }
 
-        const toSend = {
-            tweets,
-            order: ascending ? "asc": "desc",
-        };
-        if (ascending) {
-            toSend["next_since_id"] = next_since_id;
-        }
-        return res.status(200).json(toSend);
+        return res.status(200).json({ statuses, search_metadata });
     });
 }
 
@@ -86,13 +139,13 @@ function sameTweets(req, res) {
     if (!query) {
         return res.sendStatus(400);
     }
-    getSortedTweets(query, undefined, undefined, true, (tweets) => {
-        console.log(`[i] (${getCurrentTimestamp()}) Sending first ${tweets.length} tweets about ${query}`);
-
-        return res.status(200).json({ tweets });
+    getSortedTweets(query, undefined, undefined, true, (statuses) => {
+        const search_metadata = buildSearchMetadata(req, statuses);
+        console.log(`[i] (${getCurrentTimestamp()}) Sending first ${search_metadata.count} tweets about ${query}`);
+        return res.status(200).json({ statuses, search_metadata });
     });
 }
 
 module.exports = {
-  randomTweets, sortedTweets, sameTweets
+  randomTweets, timelineTweets, newestTweets, sameTweets
 };
