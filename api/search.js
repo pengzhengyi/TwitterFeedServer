@@ -64,6 +64,15 @@ function search(q, resultType="recent", count=100, timelined=true, callback=defa
 
 const pullingTimeouts = new Map();
 
+
+/**
+ * @returns {Array<String>} An array of query names.
+ */
+function listActiveStreamings() {
+  return Array.from(pullingTimeouts.keys());
+}
+
+
 /**
  * @param { String } query - The topic to search.
  * @param { Number } delay - how long to start a new search in miliseconds.
@@ -94,5 +103,9 @@ function stopAllPullTweetsPeriodically() {
 }
 
 module.exports = {
-  search, pullTweetsPeriodically, stopPullTweetsPeriodically, stopAllPullTweetsPeriodically
+  search,
+  listActiveStreamings,
+  pullTweetsPeriodically,
+  stopPullTweetsPeriodically,
+  stopAllPullTweetsPeriodically
 };

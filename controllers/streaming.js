@@ -1,7 +1,19 @@
 const { getCollection } = require("../database/connect.js");
 const { streamingTweets } = require("../database/Tweet.js");
-const { stopPullTweetsPeriodically, stopAllPullTweetsPeriodically } = require("../api/search.js");
+const { listActiveStreamings, stopPullTweetsPeriodically, stopAllPullTweetsPeriodically } = require("../api/search.js");
 const { validationErrorHandler } = require("../validators/validation.js");
+
+/* GET /streaming/list
+ *
+ * @param { Request } req - Request.
+ * @param { Response } res - Response.
+ */
+function listStreamings(req, res) {
+    const streamingNames = listActiveStreamings();
+    console.log(`[i] Listing active streamings ${streamingNames}`);
+    return res.status(200).json({ activeStreamings: streamingNames });
+}
+
 
 /**
  * POST /streaming/start?q=...
@@ -59,5 +71,8 @@ function stopAllStreamingTweets(req, res) {
 }
 
 module.exports = {
-  startStreamingTweets, stopStreamingTweets, stopAllStreamingTweets
+  listStreamings,
+  startStreamingTweets,
+  stopStreamingTweets,
+  stopAllStreamingTweets
 };

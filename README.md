@@ -25,6 +25,25 @@ Currently Active Server Address:
 
 Manages how the server will stream tweets from Twitter.
 
+##### GET /streaming/list
+
+**List all queries that are used to stream tweets on this server**
+
+Caveats:
+
++ The database might contain tweets from unlisted queries, since those streamings might already be stopped.
+
+**Example Requests**
+
+```bash
+$ curl --request GET --url 'http://<fill IP address here>:<fill port number here>/streaming/list'
+```
+
+**Example Response**
+```json
+```
+
+
 ##### POST /streaming/start
 
 **Start streaming tweets with query `q` from Twitter API**

@@ -1,7 +1,7 @@
 const express = require("express");
 const { PORT_NUM } = require("./util/secrets.js");
 const { queryValidationMiddleware, sizeValidationMiddleware, hasStreamingLockMiddleware } = require("./validators/validation.js");
-const { startStreamingTweets, stopStreamingTweets, stopAllStreamingTweets } = require("./controllers/streaming.js");
+const { listStreamings, startStreamingTweets, stopStreamingTweets, stopAllStreamingTweets } = require("./controllers/streaming.js");
 const { randomTweets, timelineTweets, newestTweets, exampleTweets } = require("./controllers/feed.js");
 
 
@@ -16,6 +16,7 @@ app.get("/", function(req, res) {
   res.status(200).send('<p>Welcome, you have reached Twitter Feed Server. Look at <a href="https://github.com/pengzhengyi/TwitterFeedServer#api-endpoints" target="_blank" rel="noopener noreferrer" title="API Doc"> API Documentation.</p>');
 });
 
+app.get("/streaming/list", listStreamings);
 app.post("/streaming/start", [queryValidationMiddleware, hasStreamingLockMiddleware], startStreamingTweets);
 app.post("/streaming/stop", [queryValidationMiddleware, hasStreamingLockMiddleware], stopStreamingTweets);
 app.post("/streaming/stopAll", hasStreamingLockMiddleware, stopAllStreamingTweets);
