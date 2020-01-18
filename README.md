@@ -19,7 +19,7 @@ A server for fetching and serving tweets.
 
 Currently Active Server Address:
 
-+ http://ec2-54-172-96-100.compute-1.amazonaws.com:3000/
++ http://ec2-54-172-96-100.compute-1.amazonaws.com:<fill port number here>/
 
 ### Fetching Tweets
 
@@ -47,7 +47,7 @@ lock | ✔ | | "cs1320" | If streaming lock for **/streaming/start** route (`STR
 **Example Requests**
 
 ```bash
-$ curl --request POST -H "Content-Type: application/json" -d '{"lock": "cs1320"}' --url 'http://localhost:3000/streaming/start?q=noodle'
+$ curl --request POST -H "Content-Type: application/json" -d '{"lock": "cs1320"}' --url 'http://<fill IP address here>:<fill port number here>/streaming/start?q=noodle'
 ```
 
 **Example Response**
@@ -76,7 +76,7 @@ lock | ✔ | | "cs1320" | If streaming lock for **/streaming/stop** route (`STRE
 **Example Requests**
 
 ```bash
-$ curl --request POST -H "Content-Type: application/json" -d '{"lock": "cs1320"}' --url 'http://<fill IP address here>:3000/streaming/stop?q=noodle'
+$ curl --request POST -H "Content-Type: application/json" -d '{"lock": "cs1320"}' --url 'http://<fill IP address here>:<fill port number here>/streaming/stop?q=noodle'
 ```
 
 **Example Response**
@@ -95,7 +95,7 @@ lock | ✔ | | "cs1320" | If streaming lock for **/streaming/stopAll** route (`S
 **Example Requests**
 
 ```bash
-$ curl --request POST -H "Content-Type: application/json" -d '{"lock": "cs1320"}' --url 'http://<fill IP address here>:3000/streaming/stopAll'
+$ curl --request POST -H "Content-Type: application/json" -d '{"lock": "cs1320"}' --url 'http://<fill IP address here>:<fill port number here>/streaming/stopAll'
 ```
 
 **Example Response**
@@ -122,7 +122,7 @@ size | ✘ | 10 | 1 | The number of tweets to return.
 **Example Requests**
 
 ```bash
-$ curl --request GET --url 'http://<fill IP address here>:3000/feed/random?q=noodle&size=1'
+$ curl --request GET --url 'http://<fill IP address here>:<fill port number here>/feed/random?q=noodle&size=1'
 ```
 
 [**Example Response**](./example_responses/random.json)
@@ -142,7 +142,7 @@ since_id | ✘ | 0 | 1218491921196146689 | Returns results with an ID greater th
 **Example Requests**
 
 ```bash
-$ curl --request GET --url 'http://<fill IP address here>:3000/feed/timeline?q=noodle&size=1000&since_id=1218491921196146689'
+$ curl --request GET --url 'http://<fill IP address here>:<fill port number here>/feed/timeline?q=noodle&size=1000&since_id=1218491921196146689'
 ```
 
 [**Example Response**](./example_responses/timeline.json)
@@ -161,7 +161,7 @@ size | ✘ | 10 | 5 | The number of tweets to return.
 **Example Requests**
 
 ```bash
-$ curl --request GET --url 'http://<fill IP address here>:3000/feed/newest?q=noodle&size=5'
+$ curl --request GET --url 'http://<fill IP address here>:<fill port number here>/feed/newest?q=noodle&size=5'
 ```
 
 ---
@@ -181,7 +181,7 @@ q | ✔ | | "noodle" | A UTF-8, URL-encoded search query of 500 characters maxim
 **Example Requests**
 
 ```bash
-$ curl --request GET --url 'http://<fill IP address here>:3000/feed/example?q=noodle'
+$ curl --request GET --url 'http://<fill IP address here>:<fill port number here>/feed/example?q=noodle'
 ```
 
 [**Example Response**](./example_responses/example.json)
