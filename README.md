@@ -6,7 +6,7 @@ A server for fetching and serving tweets.
 
 + `git clone https://github.com/pengzhengyi/TwitterFeedServer.git`
 + Fill **.env** file with Twitter API credentials and MongoDB credentials, refer to **.env.example** for some defaults.
-+ Make sure latest node and npm are used. [Node](https://nodejs.org/en/) Version should be at least `v13.6.0`.
++ Make sure recent versions of [node](https://nodejs.org/en/) and npm are used. Tested on node versions *v12.14.1* and *v13.6.0*.
   [How to install Node.js via binary archive on Linux](https://github.com/nodejs/help/wiki/Installation#how-to-install-nodejs-via-binary-archive-on-linux)
 + `npm install`
 + Run with pm2
