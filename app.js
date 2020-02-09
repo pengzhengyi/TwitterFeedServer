@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const { PORT_NUM } = require("./util/secrets.js");
 const { queryValidationMiddleware, sizeValidationMiddleware, hasStreamingLockMiddleware } = require("./validators/validation.js");
 const { listStreamings, startStreamingTweets, stopStreamingTweets, stopAllStreamingTweets } = require("./controllers/streaming.js");
@@ -7,6 +8,7 @@ const { randomTweets, timelineTweets, newestTweets, exampleTweets } = require(".
 
 // Create Express server
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // Express configuration
