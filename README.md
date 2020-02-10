@@ -184,9 +184,9 @@ Example Requests:
 curl --request GET --url 'http://<fill IP address here>:<fill port number here>/feed/newest?q=noodle&size=5'
 ```
 
----
-
 [**Example Response**](./example_responses/newest.json)
+
+---
 
 #### GET /feed/example
 
