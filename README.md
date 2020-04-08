@@ -19,7 +19,7 @@ A server for fetching and serving tweets.
 
 Currently Active Server Address:
 
-+ <http://ec2-54-172-96-100.compute-1.amazonaws.com/>
++ <http://ec2-3-92-185-155.compute-1.amazonaws.com>
 
 ### Fetching Tweets
 
